@@ -20,7 +20,10 @@ nem <- read.csv("data_file.csv",fileEncoding="UTF-8-BOM") %>%
   mutate(PCORRES = ifelse(PCORRES == "Quantity Not Sufficient", 0.0, PCORRES))  %>%
   mutate(conc_mean = ifelse(PCORRES == "NaN", "NA",PCORRES))
 
-nem_means <- nem %>% mutate(nominal_time_day = round(nominal_time_day)) %>%
+#ROUND by digit? 
+# apply findInterval for (0.1,0.3,1,3,6,10) if rounding to nearest 0.1 does not work
+
+nem_means <- nem %>% mutate(nominal_time_day = round(nominal_time_day,  digits = 1)) %>%
   group_by(nominal_time_day, Nominal_Dose) %>%
   summarise(dia_mean = mean(Diastolic.Blood.Pressure, na.rm = TRUE),
             sys_mean = mean(Systolic.Blood.Pressure, na.rm = TRUE),
